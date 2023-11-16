@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.Formula;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -15,6 +16,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -48,6 +51,14 @@ public class Student {
 	
 	@Formula ("floor(datediff(curdate(), birthdate)/365)")
 	private int age;
+	
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn (name="tuition_id")
+	private Tuition tuition;  
+	
+	@ManyToOne
+	@JoinColumn (name = "university_id")
+	private University university;
 	
 	public LocalDate getBirthdate() {
 		return birthdate;
@@ -121,6 +132,22 @@ public class Student {
 
 	public void setPhones(List<String> phones) {
 		this.phones = phones;
+	}
+
+	public Tuition getTuition() {
+		return tuition;
+	}
+
+	public void setTuition(Tuition tuition) {
+		this.tuition = tuition;
+	}
+
+	public University getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(University university) {
+		this.university = university;
 	}
 
 	@Override

@@ -8,11 +8,14 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import entidades.Student;
+import entidades.Tuition;
+import entidades.University;
 
-public class Ud4TareaAprendizaje3cEjercicio4 {
+public class Ud4TareaAprendizaje4bEjercicio4 {
 
 	/**
-	 * 4. Borra un Student y sus teléfonos
+	 * 4. OneToMany bidireccional entre entidades Student y University
+	 * Borra una Universidad y sus estudiantes.
 	 */
 	public static void main(String[] args) {
 
@@ -23,6 +26,8 @@ public class Ud4TareaAprendizaje3cEjercicio4 {
 
 		Metadata metadata = new MetadataSources( standardRegistry )
 			    .addAnnotatedClass( Student.class )
+			    .addAnnotatedClass( Tuition.class )
+			    .addAnnotatedClass( University.class )
 			    .getMetadataBuilder()
 			    .build();
 
@@ -33,17 +38,16 @@ public class Ud4TareaAprendizaje3cEjercicio4 {
 		
 		try {			
 			// crea un objeto Student
-			System.out.println("Borrando un objeto Student y sus teléfonos");
+			System.out.println("Borrando una universidad sin borrar sus estudiantes");
 			
-			int student_id = 8;
+			int university_id = 2;
 			
-			Student tempStudent = session.get(Student.class, student_id);
-			
+			University tempUniversity = session.get(University.class, university_id);
 			// comienza la transacción
 			session.beginTransaction();
 		
-			
-			session.remove(tempStudent);
+			// borra la universidad pero no el estudiante. "on delete set null" en BD
+			session.remove(tempUniversity);
 			
 			// hace commit de la transaccion
 			session.getTransaction().commit();
@@ -51,7 +55,7 @@ public class Ud4TareaAprendizaje3cEjercicio4 {
 			System.out.println("Hecho!");
 		}
 		catch ( Exception e ) {
-			// rollback ante alguna excepción
+			// rollback ante alguna excepci n
 			System.out.println("Realizando Rollback");
 			session.getTransaction().rollback();
 			e.printStackTrace();
